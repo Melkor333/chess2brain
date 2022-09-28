@@ -1,7 +1,10 @@
 const board_size = 8;
 const DEBUG = true;
+let stop = true;
+
 class Field {
-    constructor(x, y, audioLoop) {
+    constructor(x, y, audioLoop, voice='woman') {
+        this.voice = voice
         this.x = x;
         this.y = y;
         if ((x % 2 === 0 && y % 2 === 0) || (x % 2 === 1 && y % 2 === 1)) {
@@ -10,7 +13,12 @@ class Field {
             this.answer = "white";
         };
         this.audioLoop = audioLoop;
-        //this.audio = new Howl({ src: ["" + x + y + '.mp3'] });
+        var that = this;
+        this.audioy = new Howl({ src: ["../sound/" + this.string[1] + "_" + voice + '.mp3'], onend: function() {
+            that.audioLoop.last_answer = that.answer;
+            that.audioLoop.play();
+        }});
+        this.audiox = new Howl({ src: ["../sound/" + this.string[0] + "_" + voice + '.mp3'], onend: function() { that.audioy.play() } });
     };
     get string() {
         let y = 1 + eval(this.y);
@@ -18,8 +26,7 @@ class Field {
     };
     play() {
         if (DEBUG) console.log("playing: " + this.string);
-        this.audioLoop.last_answer = this.answer;
-        this.audioLoop.play();
+        this.audiox.play()
     };
 
 };
@@ -28,7 +35,9 @@ class AudioLoop {
         this.level = level;
         this.sleep_after_move = sleep_after_move;
         this.pointer = 0;
-        this.audios = []
+        this.audios = [];
+        this.run = false;
+        this.active = false;
         for (let x in [...Array(board_size).keys()]) {
             this.audios.push([]);
             for (let y in [...Array(board_size).keys()]) {
@@ -44,6 +53,11 @@ class AudioLoop {
         this.max_x = this.level
     };
     play() {
+        if (this.run === false) {
+            if (DEBUG) console.log("Running is disabled, stopping");
+            this.active = false;
+            return;
+        }
         this.pointer++
         if (this.pointer > (this.loop.length - 1)) {
             this.pointer = 0;
@@ -63,6 +77,28 @@ class AudioLoop {
         if (DEBUG) console.log("chose randomly: " + rand_x +" " + rand_y);
         this.audios[rand_x][rand_y].play()
     };
+
+};
+
+function toggle() {
+    let element = document.getElementById("play-button")
+    if (DEBUG) console.log("toggle!");
+    if (!(element.classList.contains("active"))) {
+        element.classList.add("active");
+        element.innerText = "Stop";
+        if (DEBUG) console.log("run!");
+        defaultAudioLoop.run = true;
+        if (defaultAudioLoop.active === false) {
+            if (DEBUG) console.log("start new loop!");
+            defaultAudioLoop.active = true;
+            defaultAudioLoop.play();
+        };
+    } else {
+        element.innerText = "Start";
+        element.classList.remove("active");
+        if (DEBUG) console.log("Stop audio!");
+        defaultAudioLoop.run = false;
+    };
 };
 AudioLoop.levels =  [
     [0, 1, 2, 3, 4, 5, 6, 7],
@@ -71,5 +107,5 @@ AudioLoop.levels =  [
     [1, 2, 3, 4, 5, 6],
 ];
 
-let myLoop = new AudioLoop(1, 1000)
-myLoop.play()
+let defaultAudioLoop = new AudioLoop(1, 1000);
+// document.getElementById("play-button").addEventListener("click", defaultAudioLoop.toggle);

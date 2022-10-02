@@ -1,6 +1,8 @@
 const board_size = 8;
 const DEBUG = true;
 let stop = true;
+var runningTimeout = null;
+var runningAudio = null;
 
 class Field {
     constructor(x, y, audioLoop, voice) {
@@ -15,12 +17,21 @@ class Field {
         this.audioLoop = audioLoop;
         let that = this;
         if (DEBUG) console.log("add audio '" + this.string[1] + "' with voice " + voice);
-        this.audioy = new Howl({ src: ["../sound/" + this.string[1] + "_" + voice + '.mp3'], onend: function() {
+        runningAudio = that.audioy;
+        this.audioy = new Howl({ src: ["../sound/" + this.string[1] + "_" + voice + '.mp3'],
+                                 onplay: function() { runningAudio = that.audioy; },
+                                 onend: function() {
+            runningAudio = null;
             that.audioLoop.last_answer = that.answer;
             that.audioLoop.play();
         }});
         if (DEBUG) console.log("add audio '" + this.string[0] + "' with voice " + voice);
-        this.audiox = new Howl({ src: ["../sound/" + this.string[0] + "_" + voice + '.mp3'], onend: function() { that.audioy.play() } });
+        this.audiox = new Howl({ src: ["../sound/" + this.string[0] + "_" + voice + '.mp3'],
+                                 onplay: function() { runningAudio = that.audiox; },
+                                 onend: function() {
+            runningAudio = null;
+            that.audioy.play()
+        } });
     };
     get string() {
         let y = 1 + eval(this.y);
@@ -34,16 +45,15 @@ class Field {
 };
 
 class AudioLoop {
-    constructor(level, sleep_after_question=4000, time_between_questions=2000, voice='woman') {
+    constructor(level, time_after_question=4000, time_between_questions=2000, voice='woman') {
         this.level = level;
-        this.sleep_after_question = sleep_after_question;
+        this.time_after_question = time_after_question;
         this.time_between_questions = time_between_questions;
         this.voice = voice;
         this.last_question = ""
         this.pointer = -1; // Loop starts with an increase
         this.audios = [];
         this.run = false;
-        this.active = false;
         this.last_answer = ''
         this.answers = { };
         for (let answer of ['black', 'white']) {
@@ -72,7 +82,6 @@ class AudioLoop {
 
         if (this.run === false) {
             if (DEBUG) console.log("Running is disabled, stopping");
-            this.active = false;
             return;
         }
         this.pointer++;
@@ -87,11 +96,11 @@ class AudioLoop {
             if (DEBUG) console.log('answering with ' + this.last_answer);
             this.answers[this.last_answer].play();
         } else if (this.loop[this.pointer] === 'sleep_after_question') {
-            if (DEBUG) console.log('sleep for ' + this.sleep_after_question);
-            setTimeout(() => this.play(), this.sleep_after_question);
+            if (DEBUG) console.log('sleep for ' + this.time_after_question);
+            runningTimeout = setTimeout(() => this.play(), this.time_after_question);
         } else if (this.loop[this.pointer] === 'sleep_between_questions') {
-            if (DEBUG) console.log('sleep for ' + this.sleep_between_questions);
-            setTimeout(() => this.play(), this.sleep_between_questions);
+            if (DEBUG) console.log('sleep for ' + this.time_between_questions);
+            runningTimeout = setTimeout(() => this.play(), this.time_between_questions);
         };
     }
     play_random() {
@@ -130,18 +139,24 @@ function toggle() {
     if (!(element.classList.contains("active"))) {
         element.classList.add("active");
         element.innerText = "Stop";
-        if (DEBUG) console.log("run!");
+
         defaultAudioLoop.run = true;
-        if (defaultAudioLoop.active === false) {
-            if (DEBUG) console.log("start new loop!");
-            defaultAudioLoop.active = true;
-            defaultAudioLoop.play();
-        };
+        if (DEBUG) console.log("start new loop!");
+        defaultAudioLoop.play();
     } else {
+        if (DEBUG) console.log("Stopping!");
+        defaultAudioLoop.run = false;
+        defaultAudioLoop.pointer = -1;
+        if (runningTimeout) {
+            clearTimeout(runningTimeout);
+            if (DEBUG) console.log("cleared timeout!");
+        };
+        if (runningAudio) {
+            runningAudio.stop();
+            if (DEBUG) console.log("stopped audio!");
+        };
         element.innerText = "Start";
         element.classList.remove("active");
-        if (DEBUG) console.log("Stop audio!");
-        defaultAudioLoop.run = false;
     };
 };
 AudioLoop.levels =  [
@@ -151,5 +166,5 @@ AudioLoop.levels =  [
     [1, 2, 3, 4, 5, 6],
 ];
 
-let defaultAudioLoop = new AudioLoop(1, 1000);
+let defaultAudioLoop = new AudioLoop(1, time_after_question_slider.value, time_between_questions_slider.value);
 // document.getElementById("play-button").addEventListener("click", defaultAudioLoop.toggle);

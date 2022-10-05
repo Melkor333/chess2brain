@@ -3,6 +3,7 @@ const DEBUG = true;
 let stop = true;
 var runningTimeout = null;
 var runningAudio = null;
+var defaultAudioLoop = null;
 
 class Field {
     constructor(x, y, audioLoop, voice) {
@@ -71,7 +72,7 @@ class AudioLoop {
             };
         };
         this.update_loop()
-        if (DEBUG) console.log("Level is: " + AudioLoop.levels[this.level])
+        if (DEBUG) console.log("Level is: " + this.level + " and contains " + AudioLoop.levels[this.level])
     };
     update_loop() {
         let that = this;
@@ -133,17 +134,43 @@ time_between_questions_slider.oninput = function() {
     if (DEBUG) console.log("time_between_questions_slider is now at: " + this.value);
 };
 
-function toggle() {
+
+function chooseLevel(activeLevel) {
+    var levels = [1,2,3];
+    for (let level of levels) {
+        let element = document.getElementById("level" + level);
+        if (level === activeLevel) {
+            element.classList.add("active");
+            if (defaultAudioLoop) {
+                toggle("stop");
+            };
+            defaultAudioLoop = new AudioLoop(level, time_after_question_slider.value, time_between_questions_slider.value);
+        } else {
+            if (element.classList.contains("active")) {
+                element.classList.remove("active");
+            };
+        };
+    };
+};
+
+function toggle(state="") {
+    if (!(defaultAudioLoop)) {
+        if (DEBUG) console.log("No defaultAudioLoop defined");
+        // Todo: add warning button
+        console.log("Please choose a level!");
+        return;
+    };
+
     let element = document.getElementById("play-button")
     if (DEBUG) console.log("toggle!");
-    if (!(element.classList.contains("active"))) {
+    if (!(element.classList.contains("active")) && state !== "stop") {
         element.classList.add("active");
         element.innerText = "Stop";
 
         defaultAudioLoop.run = true;
         if (DEBUG) console.log("start new loop!");
         defaultAudioLoop.play();
-    } else {
+    } else if (state !== "start") {
         if (DEBUG) console.log("Stopping!");
         defaultAudioLoop.run = false;
         defaultAudioLoop.pointer = -1;
@@ -165,6 +192,7 @@ AudioLoop.levels =  [
     [2, 3, 4, 5],
     [1, 2, 3, 4, 5, 6],
 ];
+chooseLevel(1);
 
-let defaultAudioLoop = new AudioLoop(1, time_after_question_slider.value, time_between_questions_slider.value);
+//var defaultAudioLoop = new AudioLoop(1, time_after_question_slider.value, time_between_questions_slider.value);
 // document.getElementById("play-button").addEventListener("click", defaultAudioLoop.toggle);

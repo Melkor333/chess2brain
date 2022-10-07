@@ -1,15 +1,15 @@
-version: "3"
+version: '3.2'
 
 services:
-  client:
-    image: nginx
-    volumes:
-      - ./:/usr/share/nginx/html
+  chess2brain:
+    image: chess2brain
+    networks:
+           - traefik-public
     deploy:
       labels:
         - traefik.docker.network=traefik-public
         - traefik.enable=true
-        - traefik.http.services.chess2brain.loadbalancer.server.port=8000
+        - traefik.http.services.chess2brain.loadbalancer.server.port=80
         - traefik.http.routers.chess2brain.rule=Host(`chess2brain.com`)
         - traefik.http.routers.chess2brain.entrypoints=https
         - traefik.http.routers.chess2brain.tls.certresolver=le
@@ -18,3 +18,4 @@ services:
 networks:
   traefik-public:
     external: true
+  chess2brain_default: # fuucking docker

@@ -14,6 +14,9 @@ services:
         - traefik.http.routers.chess2brain.entrypoints=https
         - traefik.http.routers.chess2brain.tls.certresolver=le
         - traefik.http.routers.chess2brain.tls=true
+        - traefik.http.routers.chess2brain-http.rule=HostRegexp(`{subdomain:[a-z]+}.chess2brain.com`, `chess2brain.com`)
+        - traefik.http.routers.chess2brain-http.entrypoints=http
+        - traefik.http.routers.chess2brain-http.middlewares=https-redirect
 
 networks:
   traefik-public:

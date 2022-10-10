@@ -6,4 +6,4 @@ RUN npm install
 FROM nginx
 WORKDIR /usr/share/nginx/html
 COPY --from=build /app /usr/share/nginx/html
-COPY ./ /usr/share/nginx/html
+COPY pub/ /usr/share/nginx/html

@@ -17,19 +17,25 @@
         </div>
       </div>
     </div>
-    <div class="container-fluid" id="intro">
+    <div class="container-fluid" id="intro" style="border-bottom: 2px solid black; margin-bottom: 20px;">
       <div class="row">
         <div class="col-12">
-          <p>This is a small utility site to train the memorization of the chess board.</p>
+          <center><p>This is a small utility site to train the memorization of the chess board.</p></center>
         </div>
         <div class="col-12">
-          <p>The idea is that </p>
+          <h3>TLDR:</h3>
+          <ul>
+            <li>It will tell you a field on the chessboard</li>
+            <li>You try to figure out the color of the field (in your head)</li>
+            <li>After a short time it will tell the answer</li>
+            <li>It will wait another short time for you to visualize it some more</li>
+          </ul>
         </div>
       </div>
     </div>
-    <div class="container-fluid" id="content">
+    <div class="container-fluid" id="content" style="text-align: center;">
       <div class="row game">
-        <div class="col-6 left">
+        <div class="col-4 left" id="options">
           <div class="row stacked">
             <div class="col-12">
               <p>Configuration Options</p>
@@ -57,13 +63,13 @@
             </div>
           </div>
         </div>
-        <div class="col-6 mid">
+        <div class="col-4 mid" id="Play-buttons">
           <div class="row stacked">
-            <div class="col-6">
-
               <a id="play-button" href="#" class="btn btn-primary btn-lg" role="button" onclick="toggle()">Start</a>
             </div>
-          </div>
+        </div>
+        <div class="col-4 mid" id="Play-buttons">
+          <p>Here comes infos</p>
         </div>
       </div>
 

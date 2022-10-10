@@ -10,76 +10,61 @@
     <script defer data-domain="chess2brain.com" src="https://plausible.yosemitesam.ch/js/plausible.js"></script>
   </head>
   <body>
-    <div class="container-fluid" id="header">
-      <div class="row">
-        <div class="col-12">
-          <center><h1 id="header">chess2brain</h1><center>
-        </div>
+    <div class="d-flex justify-content-center" id="header">
+      <h1 id="header">chess2brain</h1>
+    </div>
+    <div class="d-flex flex-column container-fluid justify-content-center" id="intro" style="border-bottom: 2px solid black; margin-bottom: 20px;">
+      <div class="d-flex justify-content-center">
+        <p>This is a small utility site to train the memorization of the chess board.</p>
+      </div>
+      <div class="d-flex justify-content-start">
+        <h3>TLDR:</h3>
+        <ul>
+          <li>It will tell you a field on the chessboard</li>
+          <li>You try to figure out the color of the field (in your head)</li>
+          <li>After a short time it will tell the answer</li>
+          <li>It will wait another short time for you to visualize it some more</li>
+        </ul>
       </div>
     </div>
-    <div class="container-fluid" id="intro" style="border-bottom: 2px solid black; margin-bottom: 20px;">
-      <div class="row">
-        <div class="col-12">
-          <center><p>This is a small utility site to train the memorization of the chess board.</p></center>
-        </div>
-        <div class="col-12">
-          <h3>TLDR:</h3>
-          <ul>
-            <li>It will tell you a field on the chessboard</li>
-            <li>You try to figure out the color of the field (in your head)</li>
-            <li>After a short time it will tell the answer</li>
-            <li>It will wait another short time for you to visualize it some more</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="container-fluid" id="content" style="text-align: center;">
-      <div class="row game">
-        <div class="col-4 left" id="options">
-          <div class="row stacked">
-            <div class="col-12">
-              <p>Configuration Options</p>
+    <div class="row" id="content" style="text-align: center;">
+        <div class="col-12 col-md-4 order-2 order-md-1 d-flex flex-column justify-content-center justify-content-md-left" id="options">
+          <div class="d-flex justify-content-center justify-content-md-left">
+            <h5>Configuration Options</h5>
+          </div>
+          <div class="d-flex justify-content-center justify-content-md-left">
+            <p style="margin-right: 25px">Level</p>
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button type="button" id="level1" onclick="chooseLevel(1)" class="btn btn-secondary">1</button>
+              <button type="button" id="level2" onclick="chooseLevel(2)" class="btn btn-secondary">2</button>
+              <button type="button" id="level3" onclick="chooseLevel(3)" class="btn btn-secondary">3</button>
             </div>
-            <div class="col-12">
-              <p>Choose the level</>
-              <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" id="level1" onclick="chooseLevel(1)" class="btn btn-secondary">1</button>
-                <button type="button" id="level2" onclick="chooseLevel(2)" class="btn btn-secondary">2</button>
-                <button type="button" id="level3" onclick="chooseLevel(3)" class="btn btn-secondary">3</button>
-              </div>
-              <p></p>
+            <p></p>
+          </div>
+          <div class="d-flex p-2 justify-content-center justify-content-md-left">Wait time after question</div>
+          <div class="d-flex p-2 justify-content-center justify-content-md-left">
+            <div class="slidecontainer">
+              <input type="range" min="1000" max="15000" value="4000" class="slider" id="time_after_question">
             </div>
-            <div class="col-12">
-              <p>Wait time after question</p>
-              <div class="slidecontainer">
-                <input type="range" min="1000" max="15000" value="4000" class="slider" id="time_after_question">
-              </div>
-            </div>
-            <div class="col-12">
-              <p>Wait time after solution</p>
-              <div class="slidecontainer">
-                <input type="range" min="1000" max="15000" value="2500" class="slider" id="time_between_questions">
-              </div>
+          </div>
+          <div class="d-flex p-2 justify-content-center justify-content-md-left">Wait time after solution</div>
+          <div class="d-flex p-2 justify-content-center justify-content-md-left">
+            <div class="slidecontainer">
+              <input type="range" min="1000" max="15000" value="2500" class="slider" id="time_between_questions">
             </div>
           </div>
         </div>
-        <div class="col-4 mid" id="Play-buttons">
+        <div class="col-12 col-md-4 order-1 order-md-2" id="play-button-div">
           <div class="row stacked">
-              <a id="play-button" href="#" class="btn btn-primary btn-lg" role="button" onclick="toggle()">Start</a>
-            </div>
+            <a id="play-button" href="#" class="btn btn-primary btn-lg" role="button" onclick="toggle()">Start</a>
+          </div>
         </div>
-        <div class="col-4 mid" id="Play-buttons">
-          <p>Here comes infos</p>
+        <div class="col-12 col-md-4 order-3 order-md-3" id="informations">
+          <h4>Here comes infos</h4>
         </div>
       </div>
 
     </div>
-</div>
-<div class="col-sm">
-  <div></div>
-  <div class="col-sm">
-  </div>
-</div>
 </div>
 
 <script src="node_modules/jquery/dist/jquery.min.js"></script>

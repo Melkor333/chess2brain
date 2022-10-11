@@ -10,15 +10,14 @@
     <script defer data-domain="chess2brain.com" src="https://plausible.yosemitesam.ch/js/plausible.js"></script>
   </head>
   <body>
-    <div class="d-flex justify-content-center" id="header">
+    <div class="d-flex justify-content-center p-4" id="header">
       <h1 id="header">chess2brain</h1>
     </div>
-    <div class="d-flex flex-column container-fluid justify-content-center" id="intro" style="border-bottom: 2px solid black; margin-bottom: 20px;">
+    <div class="d-flex flex-column container-fluid justify-content-center p-4" id="intro" style="border-bottom: 2px solid black; margin-bottom: 20px;">
       <div class="d-flex justify-content-center">
         <p>This is a small utility site to train the memorization of the chess board.</p>
       </div>
       <div class="d-flex justify-content-center">
-        <h3>TLDR:</h3>
         <ul>
           <li>It will tell you a field on the chessboard</li>
           <li>You try to figure out the color of the field (in your head)</li>
@@ -27,12 +26,12 @@
         </ul>
       </div>
     </div>
-    <div class="row" id="content" style="text-align: center;">
-        <div class="col-12 col-md-4 order-2 order-md-1 d-flex flex-column justify-content-center justify-content-md-left" id="options">
-          <div class="d-flex justify-content-center justify-content-md-left">
+    <div class="row text-center justify-content-center p-3" id="content">
+        <div class="col-6 col-sm-6 col-md-4 order-2 order-md-1 d-flex flex-column" id="options">
+          <div class="d-flex">
             <h5>Configuration Options</h5>
           </div>
-          <div class="d-flex justify-content-center justify-content-md-left">
+          <div class="d-flex p-2">
             <p style="margin-right: 25px">Level</p>
             <div class="btn-group" role="group" aria-label="Basic example">
               <button type="button" id="level1" onclick="chooseLevel(1)" class="btn btn-secondary">1</button>
@@ -42,25 +41,25 @@
             </div>
             <p></p>
           </div>
-          <div class="d-flex p-2 justify-content-center justify-content-md-left">Wait time after question</div>
-          <div class="d-flex p-2 justify-content-center justify-content-md-left">
+          <div class="d-flex p-2">Wait time after question</div>
+          <div class="d-flex p-2">
             <div class="slidecontainer">
               <input type="range" min="1000" max="15000" value="4000" class="slider" id="time_after_question">
             </div>
           </div>
-          <div class="d-flex p-2 justify-content-center justify-content-md-left">Wait time after solution</div>
-          <div class="d-flex p-2 justify-content-center justify-content-md-left">
+          <div class="d-flex p-2">Wait time after solution</div>
+          <div class="d-flex p-2">
             <div class="slidecontainer">
               <input type="range" min="1000" max="15000" value="2500" class="slider" id="time_between_questions">
             </div>
           </div>
         </div>
-        <div class="col-12 col-md-4 order-1 order-md-2" id="play-button-div">
+        <div class="col-12 col-md-4 order-1 order-md-2 p-4" id="play-button-div">
           <div class="row stacked">
             <a id="play-button" href="#" class="btn btn-primary btn-lg" role="button" onclick="toggle()">Start</a>
           </div>
         </div>
-        <div class="col-12 col-md-4 order-3 order-md-3 p-5" id="informations">
+        <div class="col-12 col-sm-6 col-md-4 order-3 order-md-3 col-xs-6 p-5 p-sm-4" id="informations">
           <h4>Levelinfo</h4>
           <p>The active Fields are marked with gray. The image will be hidden during the game, so that you're forced to visualize!</p>
           <div class="d-flex">

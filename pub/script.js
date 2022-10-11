@@ -46,8 +46,9 @@ class Field {
 };
 
 class AudioLoop {
-    constructor(level, time_after_question=4000, time_between_questions=2000, voice='woman') {
-        this.level = level;
+    constructor(activeFields, time_after_question=4000, time_between_questions=2000, voice='woman') {
+        this.activeFields = activeFields;
+        this.loop = ['random_question', 'sleep_after_question', 'answer', 'sleep_between_questions'];
         this.time_after_question = time_after_question;
         this.time_between_questions = time_between_questions;
         this.voice = voice;
@@ -57,6 +58,7 @@ class AudioLoop {
         this.run = false;
         this.last_answer = ''
         this.answers = { };
+
         for (let answer of ['black', 'white']) {
             let that = this
             if (DEBUG) console.log("add audio '" + answer + "' with voice " + voice);
@@ -71,16 +73,9 @@ class AudioLoop {
                 this.audios[x].push(new Field(x, y, this, voice));
             };
         };
-        this.update_loop()
-        if (DEBUG) console.log("Level is: " + this.level + " and contains " + AudioLoop.levels[this.level])
-    };
-    update_loop() {
-        let that = this;
-        this.loop = ['random_question', 'sleep_after_question', 'answer', 'sleep_between_questions'];
-        this.max_x = this.level;
+        if (DEBUG) console.log("Active Fields: " + this.activeFields.toString())
     };
     play() {
-
         if (this.run === false) {
             if (DEBUG) console.log("Running is disabled, stopping");
             return;
@@ -106,10 +101,10 @@ class AudioLoop {
     }
     play_random() {
         while (true) {
-            let r_x = [Math.floor(Math.random() * AudioLoop.levels[this.level].length)];
-            let r_y = [Math.floor(Math.random() * AudioLoop.levels[this.level].length)];
-            var rand_x = AudioLoop.levels[this.level][r_x];
-            var rand_y = AudioLoop.levels[this.level][r_y];
+            let r_x = [Math.floor(Math.random() * this.activeFields.length)];
+            let r_y = [Math.floor(Math.random() * this.activeFields.length)];
+            var rand_x = this.activeFields[r_x];
+            var rand_y = this.activeFields[r_y];
             var s = "" + rand_x + rand_y;
             if (DEBUG) console.log("random generated: " + s);
             if (this.last_question !== s) {
@@ -136,20 +131,35 @@ time_between_questions_slider.oninput = function() {
 
 
 function chooseLevel(activeLevel) {
-    var levels = [1,2,3];
+    var levels = [1,2,3,4];
+    let currentLevelList = [];
+    if (defaultAudioLoop) {
+        toggle("stop");
+    };
     for (let level of levels) {
+        let image = document.getElementById("level" + level + "-img");
+        image.style.visibility = "hidden";
         let element = document.getElementById("level" + level);
-        if (level === activeLevel) {
+        let isActive = element.classList.contains("active");
+        if (level === activeLevel && isActive) {
+            if (DEBUG) console.log("disabling level " + level);
+            element.classList.remove("active");
+        } else if (level === activeLevel) {
+            if (DEBUG) console.log("enabling level" + level);
             element.classList.add("active");
-            if (defaultAudioLoop) {
-                toggle("stop");
-            };
-            defaultAudioLoop = new AudioLoop(level, time_after_question_slider.value, time_between_questions_slider.value);
-        } else {
-            if (element.classList.contains("active")) {
-                element.classList.remove("active");
-            };
+            currentLevelList = currentLevelList.concat(AudioLoop.levels[level])
+            image.style.visibility = "visible";
+        } else if (isActive) {
+            if (DEBUG) console.log("readding fields of active level " + level);
+            currentLevelList = currentLevelList.concat(AudioLoop.levels[level])
+            image.style.visibility = "visible";
         };
+    };
+    // we always want at least one level chosen.
+    if (currentLevelList.length === 0) {
+        chooseLevel(activeLevel);
+    } else {
+        defaultAudioLoop = new AudioLoop(currentLevelList, time_after_question_slider.value, time_between_questions_slider.value);
     };
 };
 
@@ -166,6 +176,7 @@ function toggle(state="") {
     if (!(element.classList.contains("active")) && state !== "stop") {
         element.classList.add("active");
         element.innerText = "Stop";
+        document.getElementById("board").style.visibility = "hidden";
 
         defaultAudioLoop.run = true;
         if (DEBUG) console.log("start new loop!");
@@ -183,15 +194,18 @@ function toggle(state="") {
             if (DEBUG) console.log("stopped audio!");
         };
         element.innerText = "Start";
+        document.getElementById("board").style.visibility = "visible";
         element.classList.remove("active");
     };
 };
 AudioLoop.levels =  [
-    [0, 1, 2, 3, 4, 5, 6, 7],
+    [], // we ignore level 0
     [3, 4],
-    [2, 3, 4, 5],
-    [1, 2, 3, 4, 5, 6],
+    [2, 5],
+    [1, 6],
+    [0, 7],
 ];
+
 chooseLevel(1);
 
 //var defaultAudioLoop = new AudioLoop(1, time_after_question_slider.value, time_between_questions_slider.value);

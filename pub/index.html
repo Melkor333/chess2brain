@@ -38,6 +38,7 @@
               <button type="button" id="level1" onclick="chooseLevel(1)" class="btn btn-secondary">1</button>
               <button type="button" id="level2" onclick="chooseLevel(2)" class="btn btn-secondary">2</button>
               <button type="button" id="level3" onclick="chooseLevel(3)" class="btn btn-secondary">3</button>
+              <button type="button" id="level4" onclick="chooseLevel(4)" class="btn btn-secondary">4</button>
             </div>
             <p></p>
           </div>
@@ -59,8 +60,16 @@
             <a id="play-button" href="#" class="btn btn-primary btn-lg" role="button" onclick="toggle()">Start</a>
           </div>
         </div>
-        <div class="col-12 col-md-4 order-3 order-md-3" id="informations">
-          <h4>Here comes infos</h4>
+        <div class="col-12 col-md-4 order-3 order-md-3 p-5" id="informations">
+          <h4>Levelinfo</h4>
+          <p>The active Fields are marked with gray. The image will be hidden during the game, so that you're forced to visualize!</p>
+          <div class="d-flex">
+          <img id="board" src="img/blank_board.png" style="z-index: 1" class="img-fluid"/>
+          <img id="level1-img" src="img/level1.png" style="z-index: 2; position: relative; top:0px; left:-100%;" class="img-fluid"/>
+          <img id="level2-img" src="img/level2.png" style="z-index: 2; position: relative; top:0px; left:-200%;" class="img-fluid"/>
+          <img id="level3-img" src="img/level3.png" style="z-index: 2; position: relative; top:0px; left:-300%;" class="img-fluid"/>
+          <img id="level4-img" src="img/level4.png" style="z-index: 2; position: relative; top:0px; left:-400%;" class="img-fluid"/>
+          </div>
         </div>
       </div>
 

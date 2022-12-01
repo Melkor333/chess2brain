@@ -8,6 +8,25 @@
     <title>Chess2Brain - Memorize the chessboard in no time!</title>
     <meta name="description" content="Chess2Brain is a tool to train the visual image of the chessboard in your head.">
     <script defer data-domain="chess2brain.com" src="https://plausible.yosemitesam.ch/js/plausible.js"></script>
+    <style>
+      .boardimage {
+          position: absolute;
+          max-width: 28%;
+      }
+      #board {
+          z-index: -1;
+      }
+      @media only screen and (max-width: 768px) {
+          .boardimage {
+              max-width: 40%;
+          }
+      }
+      @media only screen and (max-width: 576px) {
+          .boardimage {
+              max-width: 75%;
+          }
+      }
+    </style>
   </head>
   <body>
     <div class="d-flex justify-content-center p-4" id="header">
@@ -26,7 +45,7 @@
         </ul>
       </div>
     </div>
-    <div class="row text-center justify-content-center p-3" id="content">
+    <div class="row text-center justify-content-center p-3" style="max-width: 100%" id="content">
         <div class="col-6 col-sm-6 col-md-4 order-2 order-md-1 d-flex flex-column" id="options">
           <div class="d-flex">
             <h5>Configuration Options</h5>
@@ -63,11 +82,11 @@
           <h4>Levelinfo</h4>
           <p>The active Fields are marked with gray. The image will be hidden during the game, so that you're forced to visualize!</p>
           <div class="d-flex">
-          <img id="board" src="img/blank_board.png" style="z-index: 1" class="img-fluid"/>
-          <img id="level1-img" src="img/level1.png" style="z-index: 2; position: relative; top:0px; left:-100%;" class="img-fluid"/>
-          <img id="level2-img" src="img/level2.png" style="z-index: 2; position: relative; top:0px; left:-200%;" class="img-fluid"/>
-          <img id="level3-img" src="img/level3.png" style="z-index: 2; position: relative; top:0px; left:-300%;" class="img-fluid"/>
-          <img id="level4-img" src="img/level4.png" style="z-index: 2; position: relative; top:0px; left:-400%;" class="img-fluid"/>
+          <img id="level1-img" src="img/level1.png" class="img-fluid boardimage"/>
+          <img id="level2-img" src="img/level2.png" class="img-fluid boardimage"/>
+          <img id="level3-img" src="img/level3.png" class="img-fluid boardimage"/>
+          <img id="level4-img" src="img/level4.png" class="img-fluid boardimage"/>
+          <img id="board" src="img/blank_board.png" class="img-fluid boardimage"/>
           </div>
         </div>
       </div>

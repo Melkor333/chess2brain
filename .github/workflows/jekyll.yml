@@ -41,7 +41,7 @@ jobs:
         with:
           install-command: npm i -g static-sitemap-cli
       - name: generate sitemap
-        run: /usr/local/bin/sscli -b https://chess2brain.com -r pub/
+        run: $HOME/.local/bin/sscli -b https://chess2brain.com -r pub/
       - name: Upload artifact
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v3

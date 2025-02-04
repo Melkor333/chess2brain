@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "bootstrap": "^5.2.1",
-    "howler": "^2.2.3",
-    "jquery": "^3.6.1"
-  }
-}

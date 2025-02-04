@@ -1,5 +1,0 @@
-#!/usr/bin/env oil
-
-git pull
-docker build . -t chess2brain:latest
-docker stack deploy -c chess2brain.yml chess2brain
